@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./Login.css";
 import { Link } from "react-router-dom";
+import styles from "./Login.module.css";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -24,40 +24,45 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Survey Tool</h1>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className={styles.container}>
+      <h1 className={styles.h1}>Survey Tool</h1>
+      <h2 className={styles.h2}>Register</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label className={styles.formLabel}>
           Username
           <input
             type="text"
             value={name}
             onChange={handleNameChange}
             required
+            className={styles.formInput}
           />
         </label>
-        <label>
+        <label className={styles.formLabel}>
           Email
           <input
             type="email"
             value={email}
             onChange={handleEmailChange}
             required
+            className={styles.formInput}
           />
         </label>
-        <label>
+        <label className={styles.formLabel}>
           Password
           <input
             type="password"
             value={password}
             onChange={handlePasswordChange}
             required
+            className={styles.formInput}
           />
         </label>
-        <button type="submit">Register</button>
+        <button type="submit" className={styles.formSubmit}>
+          Register
+        </button>
       </form>
-      <Link to="/" className="login-link">
+      <Link to="/" className={styles.formLogin}>
         Alreday have an Account?
       </Link>
     </div>

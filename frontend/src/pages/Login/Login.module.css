@@ -1,22 +1,21 @@
-.login-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: #f7f7f7;
 }
 
-h1 {
+.h1 {
   font-size: 3rem;
   margin-bottom: 5rem;
 }
 
-h2 {
+.h2 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
 
-form {
+.form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,20 +26,20 @@ form {
   margin-bottom: 5rem;
 }
 
-label {
+.formLabel {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.5rem;
 }
 
-input {
+.formInput {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 1rem;
 }
 
-.forgot-link {
+.formForgot {
   margin-top: 0.2rem;
   color: #a3a3a3;
   text-decoration: none;
@@ -48,7 +47,7 @@ input {
   margin-left: auto;
 }
 
-button {
+.formSubmit {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 3px;
@@ -57,17 +56,17 @@ button {
   font-size: 1rem;
 }
 
-button:hover {
+.formButton:hover {
   background-color: #327a35;
 }
 
-.login-link {
+.formLogin {
   color: #0077cc;
   text-decoration: none;
   font-size: 1.5rem;
 }
 
-.forgot-link:hover,
-.login-link:hover {
+.formForgot:hover,
+.formLogin:hover {
   text-decoration: underline;
 }
