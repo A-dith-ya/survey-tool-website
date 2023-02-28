@@ -29,7 +29,7 @@ const styles = {
     fontSize: "1.5rem",
   },
   dropdown: {
-    width: "50%",
+    width: "37%",
     border: "1px solid #ddd",
     borderRadius: "4px",
     padding: "8px",
@@ -39,8 +39,6 @@ const styles = {
     border: "none",
     outline: "none",
     background: "none",
-    // "-webkit-appearance": "none",
-    // "-moz-appearance": "none",
     appearance: "none",
     fontSize: "1.25rem",
     color: "#555",

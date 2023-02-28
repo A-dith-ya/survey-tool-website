@@ -1,3 +1,12 @@
+const TextQuestion = ({ question }) => {
+  return (
+    <div style={styles.container}>
+      <label style={styles.question}>{question}</label>
+      <textarea rows="1" style={styles.input}></textarea>
+    </div>
+  );
+};
+
 const styles = {
   container: {
     width: "50%",
@@ -11,20 +20,11 @@ const styles = {
   },
   input: {
     padding: "0.5rem",
-    width: "25rem",
+    width: "37rem",
     border: "1px solid #ccc",
     borderRadius: "3px",
     fontSize: "1rem",
   },
-};
-
-const TextQuestion = ({ question }) => {
-  return (
-    <div style={styles.container}>
-      <label style={styles.question}>{question}</label>
-      <input type="text" style={styles.input} />
-    </div>
-  );
 };
 
 export default TextQuestion;

@@ -1,27 +1,3 @@
-const styles = {
-  container: {
-    width: "50%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  question: {
-    marginBottom: "1rem",
-    fontSize: "1.5rem",
-  },
-  option: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "1rem",
-  },
-  checkbox: {
-    width: "2rem",
-    height: "1.25rem",
-  },
-  label: {
-    fontSize: "1.25rem",
-  },
-};
-
 const MultipleChoice = ({ question }) => {
   return (
     <div style={styles.container}>
@@ -40,6 +16,30 @@ const MultipleChoice = ({ question }) => {
       </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    width: "50%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    marginBottom: "1.5rem",
+  },
+  question: {
+    fontSize: "1.5rem",
+  },
+  option: {
+    display: "flex",
+    alignItems: "center",
+  },
+  checkbox: {
+    width: "2rem",
+    height: "1.25rem",
+  },
+  label: {
+    fontSize: "1.25rem",
+  },
 };
 
 export default MultipleChoice;
