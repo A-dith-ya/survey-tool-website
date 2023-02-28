@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./SurveyList.module.css";
 import { FaEdit, FaChartBar, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { surveys } from "../../dummy/SurveyListDummy";
+import data from "../../data/surveyList.json";
 
 const SurveyList = ({ onDelete, onEdit }) => {
   const navigation = useNavigate();
@@ -22,7 +22,7 @@ const SurveyList = ({ onDelete, onEdit }) => {
           </tr>
         </thead>
         <tbody>
-          {surveys.map((survey) => (
+          {data.map((survey) => (
             <tr className={styles.tr} key={survey.id}>
               <td className={styles.td}>{survey.title}</td>
               <td className={styles.td}>{survey.dateCreated}</td>

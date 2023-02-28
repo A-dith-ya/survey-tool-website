@@ -7,9 +7,7 @@ const Dropdown = ({ question, options, value, onChange }) => {
       <div style={styles.dropdown}>
         <select style={styles.select} value={value} onChange={onChange}>
           {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
+            <option value={option}>{option}</option>
           ))}
         </select>
       </div>

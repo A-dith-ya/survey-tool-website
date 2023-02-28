@@ -1,0 +1,43 @@
+.container {
+  width: 250px;
+  height: 100vh;
+  background-color: #ebebeb;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  text-align: center;
+  background-color: #fff;
+  font-size: 1.5rem;
+}
+
+.sectionContainer {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: #dddddd;
+  border-bottom: 1px solid #ccc;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.questionContainer:hover {
+  background-color: #d1d1d1;
+}
+
+.sectionContainerIcon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  color: #4b4e4e;
+}

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./Dashboard.module.css";
 import SurveyList from "../../components/SurveyList/SurveyList";
-import { surveys } from "../../dummy/SurveyListDummy";
 import UserHeader from "../../components/UserHeader/UserHearder";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +17,7 @@ const DashboardPage = () => {
       >
         Create Survey
       </button>
-      <SurveyList surveys={surveys} />
+      <SurveyList />
     </div>
   );
 };

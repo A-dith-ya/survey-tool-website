@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import styles from "./UserHeader.module.css";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
 const UserHeader = () => {
   const navigation = useNavigate();
 
+  const accountNav = () => {
+    navigation("/account");
+  };
   const logout = () => {
     navigation("/");
   };
@@ -22,7 +26,7 @@ const UserHeader = () => {
       </nav>
       <div className={styles.user}>
         <h3 className={styles.userName}>Lorem Ipsum</h3>
-        <FaUserCircle className={styles.userIcon} />
+        <FaUserCircle className={styles.userIcon} onClick={accountNav} />
         <FaSignOutAlt className={styles.exitIcon} onClick={logout} />
       </div>
     </header>

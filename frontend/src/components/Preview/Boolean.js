@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
 const Boolean = ({ label, value, onChange }) => {
-  let answer = !false;
+  const [toggle, setToggle] = useState(true);
+
+  const choice = () => {
+    setToggle(!toggle);
+  };
   return (
     <div style={styles.container}>
       <label style={styles.label}>{label}</label>
@@ -12,11 +17,11 @@ const Boolean = ({ label, value, onChange }) => {
           checked={value}
           onChange={(event) => onChange(event.target.checked)}
         />
-        <span style={answer ? styles.sliderRight : styles.sliderLeft}>
-          {answer ? (
-            <FaCheck style={styles.sliderIcon} />
+        <span style={toggle ? styles.sliderRight : styles.sliderLeft}>
+          {toggle ? (
+            <FaCheck style={styles.sliderIcon} onClick={choice} />
           ) : (
-            <FaTimes style={styles.sliderIcon} />
+            <FaTimes style={styles.sliderIcon} onClick={choice} />
           )}
         </span>
       </div>

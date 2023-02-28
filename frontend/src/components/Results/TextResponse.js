@@ -4,6 +4,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
+    width: "50%",
     backgroundColor: "#f2f2f2",
     borderRadius: "10px",
     marginBottom: "1rem",
