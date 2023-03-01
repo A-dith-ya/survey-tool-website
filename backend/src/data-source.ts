@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_DATABASE,
   synchronize: true,
   logging: true,
-  entities: [__dirname + "/entities/*.ts"],
+  entities: [__dirname + "/entities/*{js,ts}"],
   subscribers: [],
   migrations: [],
 });

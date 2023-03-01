@@ -15,7 +15,7 @@ describe("CRUD on User", function () {
     password: "password123",
   };
   it("creates User", async () => {
-    const res = await request(app).post("/users").send(payload).expect(201);
+    const res = await request(app).post("/users").send(payload);
 
     const createdUser = await UserRepository.findOne({
       select: {
@@ -28,8 +28,9 @@ describe("CRUD on User", function () {
       email: payload.email,
       username: payload.username,
     });
-    expect(res.body.token).toBeDefined();
-    token = await res.body.token;
+    expect(res.statusCode).toEqual(201);
+    expect(res.headers["set-cookie"]).toBeDefined();
+    token = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
   });
 
   it("gets User", async () => {
@@ -44,19 +45,43 @@ describe("CRUD on User", function () {
     });
   });
 
-  it("login/logout User", async () => {
+  it("updates User", async () => {
+    payload.email = "testuser2@example.com";
+    payload.username = "Test User2";
+
     const res = await request(app)
-      .post("/users/login")
-      .send(payload)
-      .expect(200);
-
-    expect(res.body.token).toBeDefined();
-    const token = res.body.token;
-
-    await request(app)
-      .delete("/users/logout")
+      .put("/users")
       .set("Authorization", `Bearer ${token}`)
-      .expect(200);
+      .send(payload);
+
+    const updatedUser = await UserRepository.findOne({
+      select: {
+        email: true,
+        username: true,
+      },
+      where: { email: payload.email },
+    });
+    expect(updatedUser).toMatchObject({
+      email: payload.email,
+      username: payload.username,
+    });
+    expect(res.statusCode).toEqual(200);
+    expect(res.headers["set-cookie"]).toBeDefined();
+    token = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
+  });
+
+  it("login/logout User", async () => {
+    const res = await request(app).post("/users/login").send(payload);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.headers["set-cookie"]).toBeDefined();
+    token = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
+
+    const res2 = await request(app)
+      .delete("/users/logout")
+      .set("Authorization", `Bearer ${token}`);
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.headers["set-cookie"][0]).toMatch(/token=;.*/);
   });
 
   it("delete User", async () => {

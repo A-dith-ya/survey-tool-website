@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Length, IsEmail, MinLength } from "class-validator";
+import { Survey } from "./Survey";
 
 @Entity()
 export class User {
@@ -17,4 +18,7 @@ export class User {
   @Column()
   @MinLength(8)
   password: string;
+
+  @OneToMany(() => Survey, (survey) => survey.user)
+  surveys: Survey[];
 }
