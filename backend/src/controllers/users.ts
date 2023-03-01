@@ -44,9 +44,10 @@ export const createUser = async (
       }
     );
     // Set token as HttpOnly cookie
-    res.cookie("token", token, { httpOnly: true });
-
-    res.status(201).send("Created user");
+    res
+      .cookie("token", token, { httpOnly: true })
+      .status(201)
+      .send("Created user");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -59,7 +60,6 @@ export const loginUser = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
-
     const user = await UserRepository.findOne({
       where: { email },
     });
@@ -81,8 +81,10 @@ export const loginUser = async (
         expiresIn: "1h",
       }
     );
-    res.cookie("token", token, { httpOnly: true });
-    res.status(200).send("Logged in");
+    res
+      .cookie("token", token, { httpOnly: true })
+      .status(200)
+      .send("Logged in");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -161,9 +163,8 @@ export const deleteUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    res.clearCookie("token");
     await UserRepository.delete({ id: req.userId });
-    res.status(200).send("Deleted user");
+    res.clearCookie("token").status(200).send("Deleted user");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");

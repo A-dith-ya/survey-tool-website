@@ -9,14 +9,11 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   try {
-    // Check for authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
+    // Verify token
+    const token = req.cookies.token;
+    if (!token) {
       return res.status(401).send("Unauthorized");
     }
-
-    // Verify token
-    const token = req.header("Authorization")!.replace("Bearer ", "");
 
     const payload: any = jwt.verify(token, config.JWT_SECRET);
     req.userId = payload.userId;

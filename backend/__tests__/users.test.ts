@@ -14,6 +14,7 @@ describe("CRUD on User", function () {
     username: "Test User",
     password: "password123",
   };
+
   it("creates User", async () => {
     const res = await request(app).post("/users").send(payload);
 
@@ -36,7 +37,7 @@ describe("CRUD on User", function () {
   it("gets User", async () => {
     const res = await request(app)
       .get("/users")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", `token=${token}`)
       .expect(200);
 
     expect(res.body).toMatchObject({
@@ -51,7 +52,7 @@ describe("CRUD on User", function () {
 
     const res = await request(app)
       .put("/users")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", `token=${token}`)
       .send(payload);
 
     const updatedUser = await UserRepository.findOne({
@@ -79,7 +80,7 @@ describe("CRUD on User", function () {
 
     const res2 = await request(app)
       .delete("/users/logout")
-      .set("Authorization", `Bearer ${token}`);
+      .set("Cookie", `token=${token}`);
     expect(res2.statusCode).toEqual(200);
     expect(res2.headers["set-cookie"][0]).toMatch(/token=;.*/);
   });
@@ -87,7 +88,7 @@ describe("CRUD on User", function () {
   it("delete User", async () => {
     await request(app)
       .delete("/users")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", `token=${token}`)
       .expect(200);
 
     const deletedUser = await UserRepository.findOne({
