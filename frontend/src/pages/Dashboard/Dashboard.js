@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Dashboard.module.css";
 import SurveyList from "../../components/SurveyList/SurveyList";
-import UserHeader from "../../components/UserHeader/UserHearder";
+import UserHeader from "../../components/Header/UserHeader";
 import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
