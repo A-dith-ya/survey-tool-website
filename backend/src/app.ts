@@ -1,6 +1,7 @@
 /// <reference path="../custom.d.ts" />
 import express from "express";
 import users from "./routes/users";
+import surveys from "./routes/surveys";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "./config";
@@ -18,5 +19,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", users);
+app.use("/surveys", surveys);
 
 export default app;

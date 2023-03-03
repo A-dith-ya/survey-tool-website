@@ -26,7 +26,7 @@ export class Survey {
   @Column({
     nullable: true,
   })
-  description: string;
+  description?: string;
 
   @Column({
     default: 1,
@@ -48,9 +48,15 @@ export class Survey {
   })
   deadline_time: string;
 
-  @ManyToOne(() => User, (user) => user.surveys)
+  @ManyToOne(() => User, (user) => user.surveys, { onDelete: "CASCADE" })
   user: User;
 
   @OneToMany(() => Question, (question) => question.survey, { cascade: true })
   questions: Question[];
+
+  constructor(user: User, title: string, description?: string) {
+    this.user = user;
+    this.title = title;
+    this.description = description;
+  }
 }

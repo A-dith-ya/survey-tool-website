@@ -147,9 +147,7 @@ export const getUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    const user = await UserRepository.findOne({
-      where: { id: req.userId },
-    });
+    const user = await UserRepository.findOne({ where: { id: req.userId } });
 
     res.status(200).send({ username: user!.username, email: user!.email });
   } catch (err) {
