@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styles from "./UserHeader.module.css";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import UserContext from "../AuthForm/UserContext";
+import { logoutUser } from "../../apis/users";
+
 const UserHeader = () => {
+  const { user, setUser } = useContext(UserContext);
   const navigation = useNavigate();
 
   const accountNav = () => {
     navigation("/account");
   };
-  const logout = () => {
-    navigation("/");
+  const logout = async () => {
+    try {
+      await logoutUser();
+      navigation("/");
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
+    }
   };
   return (
     <header className={styles.container}>
@@ -25,9 +35,13 @@ const UserHeader = () => {
         </ul>
       </nav>
       <div className={styles.user}>
-        <h3 className={styles.userName}>Lorem Ipsum</h3>
+        <h3 className={styles.userName}>{user.username}</h3>
         <FaUserCircle className={styles.userIcon} onClick={accountNav} />
-        <FaSignOutAlt className={styles.exitIcon} onClick={logout} />
+        <FaSignOutAlt
+          data-cy="logoutButton"
+          className={styles.exitIcon}
+          onClick={logout}
+        />
       </div>
     </header>
   );
