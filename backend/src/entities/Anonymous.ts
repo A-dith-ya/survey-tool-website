@@ -14,6 +14,13 @@ export class Anonymous {
   })
   completion: boolean;
 
-  @ManyToOne(() => Response, (response) => response.anonymouses)
+  @ManyToOne(() => Response, (response) => response.anonymouses, {
+    onDelete: "CASCADE",
+  })
   response: Response;
+
+  constructor(ip: string) {
+    this.ip = ip;
+    this.completion = true;
+  }
 }

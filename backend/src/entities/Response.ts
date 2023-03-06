@@ -23,9 +23,18 @@ export class Response {
   })
   numeric: number;
 
-  @ManyToOne(() => Option, (option) => option.response)
+  @ManyToOne(() => Option, (option) => option.response, {
+    onDelete: "CASCADE",
+  })
   options: Option;
 
-  @OneToMany(() => Anonymous, (anonymous) => anonymous.response)
+  @OneToMany(() => Anonymous, (anonymous) => anonymous.response, {
+    cascade: true,
+  })
   anonymouses: Anonymous[];
+
+  constructor(option: Option, text: string) {
+    this.options = option;
+    this.text = text;
+  }
 }

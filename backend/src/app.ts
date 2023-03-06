@@ -2,6 +2,7 @@
 import express from "express";
 import users from "./routes/users";
 import surveys from "./routes/surveys";
+import responses from "./routes/responses";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "./config";
@@ -20,5 +21,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", users);
 app.use("/surveys", surveys);
+app.use("/responses", responses);
 
 export default app;
