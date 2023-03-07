@@ -7,10 +7,12 @@ import RegisterPage from "./pages/Auth/Register";
 import AccountPage from "./pages/Auth/Account";
 import DashboardPage from "./pages/Dashboard/Dashboard";
 import SurveyPage from "./pages/Survey/Survey";
-
+import PublishPage from "./pages/Preview/Publish";
 import PreviewPage from "./pages/Preview/Preview";
 import ResponsePage from "./pages/Response/Response";
 import UserContext from "./components/AuthForm/UserContext";
+import store from "./app/store";
+import { Provider } from "react-redux";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
     element: <PreviewPage />,
   },
   {
+    path: "/open/:surveyId",
+    element: <PublishPage />,
+  },
+  {
     path: "/response",
     element: <ResponsePage />,
   },
@@ -48,9 +54,11 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <RouterProvider router={router}>
-        <React.StrictMode></React.StrictMode>
-      </RouterProvider>
+      <Provider store={store}>
+        <RouterProvider router={router}>
+          <React.StrictMode></React.StrictMode>
+        </RouterProvider>
+      </Provider>
     </UserContext.Provider>
   );
 }

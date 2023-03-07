@@ -1,45 +1,68 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import MultipleChoice from "../../components/Preview/MultipleChoice";
 import TextQuestion from "../../components/Preview/TextQuestion";
 import Boolean from "../../components/Preview/Boolean";
 import Dropdown from "../../components/Preview/Dropdown";
 import styles from "./Preview.module.css";
 import { FaBackspace } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 const PreviewPage = () => {
+  const { surveyId } = useParams();
   const navigation = useNavigate();
   const location = useLocation();
 
-  const { title, desc, questions } = location.state;
-
-  const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-  ];
-
-  const value = "option2";
-
-  const handleChange = (event) => {
-    const selectedValue = event.target.value;
-  };
+  const [title, setTitle] = useState("");
+  const [description, setDesc] = useState("");
+  const [questions, setQuestions] = useState([]);
 
   const navigateDesign = () => {
-    navigation("/survey");
+    navigation("/survey", {
+      state: {
+        surveyId: location.state.surveyId,
+        questions: location.state.questions,
+      },
+    });
   };
+
+  useEffect(() => {
+    const { title, description, questions } = location.state.questions;
+    setTitle(title);
+    setDesc(description);
+
+    if (questions) {
+      const newOptions = questions.map((question) => {
+        const convertedQuestion = {
+          question: question.question,
+          type: question.type,
+          options: question.options.map((option) => {
+            return { value: option };
+          }),
+        };
+
+        return convertedQuestion;
+      });
+
+      setQuestions(newOptions);
+    }
+  }, [surveyId, location.state.questions]);
 
   return (
     <div className={styles.container}>
-      <FaBackspace className={styles.backspace} onClick={navigateDesign} />
+      {!surveyId && (
+        <FaBackspace
+          className={styles.backspace}
+          onClick={navigateDesign}
+          data-cy="navSurvey"
+        />
+      )}
       <h1 className={styles.h1}>{title}</h1>
-      <h2 className={styles.h2}>{desc}</h2>
+      <h2 className={styles.h2}>{description}</h2>
       {questions.map((question, index) => {
         switch (question.type) {
-          case "text":
+          case "TEXT":
             return <TextQuestion question={question.question} />;
-          case "multiple":
+          case "MULTIPLE":
             return (
               <MultipleChoice
                 type="radio"
@@ -47,7 +70,7 @@ const PreviewPage = () => {
                 options={question.options}
               />
             );
-          case "checkbox":
+          case "CHECKBOX":
             return (
               <MultipleChoice
                 type="checkbox"
@@ -55,14 +78,14 @@ const PreviewPage = () => {
                 options={question.options}
               />
             );
-          case "dropdown":
+          case "DROPDOWN":
             return (
               <Dropdown
                 question={question.question}
                 options={question.options}
               />
             );
-          case "boolean":
+          case "BOOLEAN":
             return <Boolean label={question.question} value={true} />;
           default:
             return <div></div>;

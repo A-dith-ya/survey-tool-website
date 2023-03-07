@@ -5,7 +5,7 @@ describe("My First Test", () => {
 
   const account = {
     username: "TestCypress",
-    email: "TestCypress2132212@example.com",
+    email: "TestCypress@example.com",
     password: "TestCypress123",
   };
   it("CRUD User on Survey Tool Website", () => {

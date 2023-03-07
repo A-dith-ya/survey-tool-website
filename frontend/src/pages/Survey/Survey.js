@@ -1,14 +1,19 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Survey.module.css";
 import Sidebar from "../../components/SurveyQuestion/Sidebar";
 import UserHeader from "../../components/Header/UserHeader";
 import QuestionForm from "../../components/SurveyQuestion/QuestionForm";
-import data from "../../data/surveyQuestions.json";
+import { useLocation } from "react-router-dom";
+import { getSurvey } from "../../apis/surveys";
 
 const SurveyPage = () => {
+  const location = useLocation();
+
+  const [status, setStatus] = useState("DRAFT");
+  const [surveyId, setSurveyId] = useState();
   const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [questions, setQuestions] = useState(data);
+  const [description, setDesc] = useState("");
+  const [questions, setQuestions] = useState([]);
 
   const handleQuestionChange = (index, event) => {
     const newQuestions = [...questions];
@@ -44,15 +49,50 @@ const SurveyPage = () => {
     setQuestions(newQuestions);
   };
 
+  const onInit = async (surveyId) => {
+    try {
+      const res = await getSurvey(surveyId);
+
+      if (res.title) setTitle(res.title);
+      if (res.description) setDesc(res.description);
+      if (res.questions) setQuestions(res.questions);
+      if (res.status) setStatus(res.status);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (location.state) {
+      setSurveyId(location.state.surveyId);
+    }
+    if (surveyId) {
+      onInit(surveyId);
+    }
+    if (location.state && location.state.questions) {
+      const { title, description, questions } = location.state.questions;
+      setTitle(title);
+      setDesc(description);
+      setQuestions(questions);
+    }
+  }, [surveyId, location.state]);
+
   return (
     <div>
       <UserHeader />
+
       <div className={styles.container}>
         <Sidebar
           onQuestionAdd={addQuestion}
-          questions={{ title, desc, questions }}
+          questions={{ surveyId, status, title, description, questions }}
+          surveyId={surveyId}
+          setSurveyId={setSurveyId}
+          setStatus={setStatus}
         />
         <div className={styles.surveyContainer}>
+          {status === "OPEN" && (
+            <h2>Survey open at this link: http://API_URL/open/{surveyId}</h2>
+          )}
           <input
             type="text"
             value={title}
@@ -62,7 +102,7 @@ const SurveyPage = () => {
           />
           <input
             type="text"
-            value={desc}
+            value={description}
             placeholder="Survey Descrption..."
             onChange={(e) => setDesc(e.target.value)}
             className={styles.desc}
