@@ -1,16 +1,17 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-const BarChartResponse = () => {
+const BarChartResponse = ({ title, labels, data }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    // Chart options and data
     const chartData = {
-      labels: ["Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+      labels,
       datasets: [
         {
-          label: "Question 1",
-          data: [10, 20, 30, 40, 50],
+          label: title,
+          data,
         },
       ],
     };
@@ -28,7 +29,7 @@ const BarChartResponse = () => {
           align: "end",
           anchor: "end",
           font: {
-            size: 30,
+            size: 20,
           },
           formatter: function (value, context) {
             return value;
@@ -42,6 +43,7 @@ const BarChartResponse = () => {
       },
     };
 
+    // Chart instance with canvasRef, data and options
     const myChart = new Chart(canvasRef.current, {
       type: "bar",
       data: chartData,
@@ -49,6 +51,7 @@ const BarChartResponse = () => {
       plugins: [ChartDataLabels],
     });
 
+    // Clean up chart instance on unmount
     return () => {
       myChart.destroy();
     };

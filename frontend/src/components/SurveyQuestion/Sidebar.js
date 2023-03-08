@@ -9,16 +9,44 @@ import {
   FaPaperPlane,
 } from "react-icons/fa";
 import styles from "./Siderbar.module.css";
+import { createSurvey, updateStatus } from "../../apis/surveys";
 
-const Sidebar = ({ questions, onQuestionAdd }) => {
+const Sidebar = ({
+  questions,
+  onQuestionAdd,
+  surveyId,
+  setSurveyId,
+  setStatus,
+}) => {
   const navigation = useNavigate();
 
-  const publishSurvey = () => {
-    navigation("/publish");
+  // Save present survey data
+  const saveSurvey = async () => {
+    try {
+      if (questions.title)
+        setSurveyId(await createSurvey({ surveyId, ...questions }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Change the status of the survey
+  const publishSurvey = async () => {
+    try {
+      if (questions.status === "DRAFT") {
+        await updateStatus(surveyId, "OPEN");
+        setStatus("OPEN");
+      } else {
+        await updateStatus(surveyId, "DRAFT");
+        setStatus("DRAFT");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const previewSurvey = () => {
-    navigation("/preview", { state: { ...questions } });
+    navigation("/preview", { state: { surveyId, questions } });
   };
 
   return (
@@ -28,41 +56,42 @@ const Sidebar = ({ questions, onQuestionAdd }) => {
         <ul className={styles.sectionContainer}>
           <li
             className={styles.questionContainer}
-            onClick={() => onQuestionAdd("text")}
+            onClick={() => onQuestionAdd("TEXT")}
           >
             <FaQuestion className={styles.sectionContainerIcon} />
             <span className={styles.sectionContainerText}>Text Question</span>
           </li>
           <li
             className={styles.questionContainer}
-            onClick={() => onQuestionAdd("multiple")}
+            onClick={() => onQuestionAdd("MULTIPLE")}
           >
             <FaListOl className={styles.sectionContainerIcon} />
             <span className={styles.sectionContainerText}>Multiple Choice</span>
           </li>
           <li
             className={styles.questionContainer}
-            onClick={() => onQuestionAdd("checkbox")}
+            onClick={() => onQuestionAdd("CHECKBOX")}
           >
             <FaCheckSquare className={styles.sectionContainerIcon} />
             <span className={styles.sectionContainerText}>Checkbox</span>
           </li>
           <li
             className={styles.questionContainer}
-            onClick={() => onQuestionAdd("dropdown")}
+            onClick={() => onQuestionAdd("DROPDOWN")}
           >
             <FaListAlt className={styles.sectionContainerIcon} />
             <span cclassName={styles.sectionContainerText}>Dropdown</span>
           </li>
           <li
             className={styles.questionContainer}
-            onClick={() => onQuestionAdd("boolean")}
+            onClick={() => onQuestionAdd("BOOLEAN")}
           >
             <FaPaperPlane className={styles.sectionContainerIcon} />
             <span className={styles.sectionContainerText}>True/False</span>
           </li>
         </ul>
       </div>
+
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Actions</h3>
         <ul className={styles.sectionContainer}>
@@ -75,18 +104,22 @@ const Sidebar = ({ questions, onQuestionAdd }) => {
               Preview
             </span>
           </li>
-          <li className={styles.questionContainer}>
-            <FaSave className={styles.sectionContainerIcon} />
-            <span
-              onClick={publishSurvey}
-              className={styles.sectionContainerText}
-            >
-              Save
-            </span>
-          </li>
-          <li className={styles.questionContainer}>
+          {questions.status === "DRAFT" && (
+            <li className={styles.questionContainer}>
+              <FaSave className={styles.sectionContainerIcon} />
+              <span
+                onClick={saveSurvey}
+                className={styles.sectionContainerText}
+              >
+                Save
+              </span>
+            </li>
+          )}
+          <li className={styles.questionContainer} onClick={publishSurvey}>
             <FaPaperPlane className={styles.sectionContainerIcon} />
-            <span className={styles.sectionContainerText}>Publish</span>
+            <span className={styles.sectionContainerText}>
+              {questions.status === "DRAFT" ? "Publish" : "Unpublish"}
+            </span>
           </li>
         </ul>
       </div>

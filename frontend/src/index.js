@@ -16,7 +16,7 @@ import { Provider } from "react-redux";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/*",
     element: <LoginPage />,
   },
   {
@@ -50,6 +50,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  // User Context info throughout the app
   const [user, setUser] = useState({});
 
   return (

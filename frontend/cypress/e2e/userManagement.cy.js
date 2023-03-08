@@ -1,16 +1,13 @@
+import user from "../../src/data/user.json";
+
 describe("My First Test", () => {
   before(() => {
     // cy.exec("cd ../backend && npm start &");
   });
 
-  const account = {
-    username: "TestCypress",
-    email: "TestCypress@example.com",
-    password: "TestCypress123",
-  };
-  it("CRUD User on Survey Tool Website", () => {
-    const { username, email, password } = account;
-    // Create a new user
+  it("User manages account", () => {
+    const { username, email, password } = user;
+    // Create a new User
     cy.visit("/register");
 
     cy.get("input[name=username]").type(username);
@@ -20,7 +17,7 @@ describe("My First Test", () => {
     cy.wait(1000);
     cy.url().should("include", "/dashboard");
 
-    // Logout, Login
+    // Logout, Login User
     cy.get('[data-cy="logoutButton"]').click();
     cy.get("input[name=email]").type(email);
     cy.get("input[name=password]").type(password);
@@ -30,7 +27,7 @@ describe("My First Test", () => {
 
     // Update User
     cy.visit("/account");
-    cy.get("input[name=username]").clear().type("CypressTest");
+    cy.get("input[name=username]").clear().type("Cypress User");
     cy.get("input[name=email]").clear().type(email);
     cy.get("input[name=password]").type(password);
     cy.get('[data-cy="myButton"]').click();

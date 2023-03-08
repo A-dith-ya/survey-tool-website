@@ -1,3 +1,16 @@
+const TextResponse = ({ question, answers }) => {
+  return (
+    <div style={styles.container}>
+      <div style={styles.question}>{question}</div>
+      {answers.map((response, index) => (
+        <div key={index} style={styles.response}>
+          {response}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const styles = {
   container: {
     display: "flex",
@@ -20,20 +33,4 @@ const styles = {
   },
 };
 
-const mockData = {
-  question: "What is your favorite color?",
-  responses: ["Blue", "Green", "Red", "Yellow"],
-};
-
-export const TextResponse = () => {
-  return (
-    <div style={styles.container}>
-      <div style={styles.question}>{mockData.question}</div>
-      {mockData.responses.map((response, index) => (
-        <div key={index} style={styles.response}>
-          {response}
-        </div>
-      ))}
-    </div>
-  );
-};
+export default TextResponse;

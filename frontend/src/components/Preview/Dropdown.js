@@ -1,13 +1,38 @@
 import React from "react";
+import { AddResponse } from "../../features/response/responseSlice";
+import { useDispatch } from "react-redux";
 
-const Dropdown = ({ question, options, value, onChange }) => {
+const Dropdown = ({ question, options, value }) => {
+  const dispatch = useDispatch();
+
+  const handleAnswerChange = (event) => {
+    // Set selected option id based on user input
+    const selectedOptionId = options.find(
+      (option) => option.value === event.target.value
+    ).id;
+
+    dispatch(
+      AddResponse({
+        optionId: selectedOptionId,
+        text: event.target.value,
+        options,
+      })
+    );
+  };
+
   return (
     <div style={styles.container}>
       <label style={styles.question}>{question}</label>
       <div style={styles.dropdown}>
-        <select style={styles.select} value={value} onChange={onChange}>
+        <select
+          style={styles.select}
+          value={value}
+          onChange={handleAnswerChange}
+        >
           {options.map((option) => (
-            <option value={option}>{option}</option>
+            <option key={option.id} value={option.value}>
+              {option.value}
+            </option>
           ))}
         </select>
       </div>

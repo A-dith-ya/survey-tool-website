@@ -13,28 +13,35 @@ const QuestionForm = ({
   onQuestionTypeChange,
   onRemove,
 }) => {
+  const QuestionType = {
+    TEXT: "TEXT",
+    MULTIPLE: "MULTIPLE",
+    BOOLEAN: "BOOLEAN",
+    DROPDOWN: "DROPDOWN",
+    CHECKBOX: "CHECKBOX",
+  };
+
+  // Add a new option via button click
   const addOption = () => {
     onOptionChange(number, [...options, ""]);
   };
 
+  // Remove an option via icon click
   const removeOption = (index) => {
     const newOptions = [...options];
     newOptions.splice(index, 1);
     onOptionChange(number, newOptions);
   };
 
+  // Change the option value via input change
   const handleOptionChange = (index, value) => {
     const newOptions = [...options];
     newOptions[index] = value;
     onOptionChange(number, newOptions);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-cy="questionContainer">
       <div className={styles.questionContainer}>
         <div className={styles.questionNumber}>{number}.</div>
         <input
@@ -45,7 +52,9 @@ const QuestionForm = ({
           className={styles.questionInput}
         />
       </div>
-      {(type === "multiple" || type === "checkbox" || type === "dropdown") && (
+      {(type === QuestionType.MULTIPLE ||
+        type === QuestionType.CHECKBOX ||
+        type === QuestionType.DROPDOWN) && (
         <div className={styles.optionLabel}>
           <button
             type="button"
@@ -64,13 +73,14 @@ const QuestionForm = ({
                 placeholder={`Option ${index + 1}`}
                 className={styles.optionInput}
               />
-              {(type === "multiple" || type === "dropdown") && (
+              {(type === QuestionType.MULTIPLE ||
+                type === QuestionType.DROPDOWN) && (
                 <FaTimesCircle
                   className={styles.optionIcon}
                   onClick={() => removeOption(index)}
                 />
               )}
-              {type === "checkbox" && (
+              {type === QuestionType.CHECKBOX && (
                 <FaMinusSquare
                   className={styles.optionIcon}
                   onClick={() => removeOption(index)}
@@ -85,11 +95,11 @@ const QuestionForm = ({
         value={type}
         onChange={onQuestionTypeChange}
       >
-        <option value="text">Text Input</option>
-        <option value="multiple">Multiple Choice</option>
-        <option value="checkbox">Checkbox</option>
-        <option value="dropdown">Dropdown</option>
-        <option value="boolean">True/False</option>
+        <option value={QuestionType.TEXT}>Text Input</option>
+        <option value={QuestionType.MULTIPLE}>Multiple Choice</option>
+        <option value={QuestionType.CHECKBOX}>Checkbox</option>
+        <option value={QuestionType.DROPDOWN}>Dropdown</option>
+        <option value={QuestionType.BOOLEAN}>True/False</option>
       </select>
       <button onClick={() => onRemove(number)} className={styles.submit}>
         Delete

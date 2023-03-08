@@ -16,17 +16,24 @@ const PublishPage = () => {
   const [description, setDesc] = useState("");
   const [questions, setQuestions] = useState([]);
 
+  // User selected responses from options
   const surveyResponses = useSelector((state) => state.response.responses);
 
+  // Survey completion status
+  const [complete, setComplete] = useState(false);
+
+  // Submits survey response
   const handleSubmit = async () => {
     try {
       await submitSurvey(surveyResponses);
+      setComplete(true);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getOptions = async (options) => {
+  // Gets survey data
+  const getOptions = async () => {
     try {
       const response = await getSurveyResponse(surveyId);
 
@@ -35,12 +42,23 @@ const PublishPage = () => {
       setQuestions(response.questions);
     } catch (error) {
       console.log(error);
+      // User alreday complete survey
+      if (error.message === "Failed to fetch survey") setComplete(true);
+
       setNotFound(true);
     }
   };
   useEffect(() => {
     getOptions();
   }, []);
+
+  if (complete) {
+    return (
+      <div className={styles.container}>
+        <h1>Comepleted Survey!!!</h1>
+      </div>
+    );
+  }
 
   if (notFound) {
     return (

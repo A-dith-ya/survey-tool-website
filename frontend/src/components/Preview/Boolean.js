@@ -1,27 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { AddResponse } from "../../features/response/responseSlice";
+import { useDispatch } from "react-redux";
 
-const Boolean = ({ label, value, onChange }) => {
+const Boolean = ({ label, value, options }) => {
+  const dispatch = useDispatch();
+
   const [toggle, setToggle] = useState(true);
 
-  const choice = () => {
+  // Toggle boolean value
+  const handleAnswerChange = () => {
     setToggle(!toggle);
   };
+
+  // Add response when toggle state changes
+  useEffect(() => {
+    if (options)
+      dispatch(
+        AddResponse({
+          optionId: options[0].id,
+          text: toggle.toString(),
+          options,
+        })
+      );
+  }, [toggle]);
+
   return (
     <div style={styles.container}>
       <label style={styles.label}>{label}</label>
       <div style={styles.toggle}>
-        <input
-          style={styles.checkbox}
-          type="checkbox"
-          checked={value}
-          onChange={(event) => onChange(event.target.checked)}
-        />
+        <input style={styles.checkbox} type="checkbox" checked={value} />
         <span style={toggle ? styles.sliderRight : styles.sliderLeft}>
+          {/* Render check icon when toggle is true */}
           {toggle ? (
-            <FaCheck style={styles.sliderIcon} onClick={choice} />
+            <FaCheck style={styles.sliderIcon} onClick={handleAnswerChange} />
           ) : (
-            <FaTimes style={styles.sliderIcon} onClick={choice} />
+            <FaTimes style={styles.sliderIcon} onClick={handleAnswerChange} />
           )}
         </span>
       </div>

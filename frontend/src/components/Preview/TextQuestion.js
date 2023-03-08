@@ -1,8 +1,27 @@
-const TextQuestion = ({ question }) => {
+import { AddResponse } from "../../features/response/responseSlice";
+import { useDispatch } from "react-redux";
+
+const TextQuestion = ({ question, options }) => {
+  const dispatch = useDispatch();
+
+  const handleAnswerChange = (event) => {
+    dispatch(
+      AddResponse({
+        optionId: options[0].id,
+        text: event.target.value,
+        options,
+      })
+    );
+  };
+
   return (
     <div style={styles.container}>
       <label style={styles.question}>{question}</label>
-      <textarea rows="1" style={styles.input}></textarea>
+      <textarea
+        rows="1"
+        style={styles.input}
+        onChange={handleAnswerChange}
+      ></textarea>
     </div>
   );
 };
