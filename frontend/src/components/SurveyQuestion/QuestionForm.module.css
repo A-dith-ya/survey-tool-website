@@ -5,18 +5,8 @@
   width: 60%;
   align-items: center;
   padding: 1rem;
-  background-color: #ccc;
+  background-color: #e4e2e2;
   margin-bottom: 1rem;
-}
-
-.questionContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.questionNumber {
 }
 
 .questionInput {
@@ -71,13 +61,11 @@
 
 .dropdown {
   align-self: flex-end;
-  margin-bottom: 1rem;
-  background-color: #dfdabb;
+  background-color: #c2d7fc;
   border: 1px solid #aaa;
   border-radius: 2px;
   color: #555;
-  font-size: 1.1rem;
-  margin-left: 0.5rem;
+  font-size: 1rem;
   padding: 0.2rem;
 }
 
@@ -86,7 +74,7 @@
   margin-right: 0.5rem;
   border: none;
   border-radius: 3px;
-  background-color: #849fcf;
+  background-color: #a0bae7;
   color: #fff;
   font-size: 1rem;
 }

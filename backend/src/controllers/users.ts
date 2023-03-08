@@ -24,18 +24,16 @@ export const createUser = async (
     }
 
     // Create user
-    const user = new User();
-    user.username = username;
-    user.email = email;
-    user.password = password;
+    const user = new User(username, email, password);
 
     // Verify User data
-    const errors = await validate(user);
+    const errors = await validate(new User(username, email, password));
     if (errors.length > 0) throw new Error(`Incorrect User info`);
 
     user.password = await bcrypt.hash(password, 10);
     await UserRepository.save(user);
 
+    // Generate JWT
     const token = await jwt.sign(
       { userId: user.id, username, email },
       config.JWT_SECRET,
@@ -68,6 +66,7 @@ export const loginUser = async (
       return;
     }
 
+    // Verify password
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
       res.status(401).send("Invalid email or password");
@@ -98,17 +97,14 @@ export const putUser = async (
   try {
     const { username, email, password } = req.body;
 
-    const user = new User();
-    user.username = username;
-    user.email = email;
-    user.password = password;
+    const user = new User(username, email, password);
 
-    // Verify User data
     const errors = await validate(user);
     if (errors.length > 0) throw new Error(`Incorrect User info`);
 
     user.password = await bcrypt.hash(password, 10);
 
+    // Update user
     await UserRepository.update(
       { id: req.userId },
       { username, email, password: user.password }
@@ -134,6 +130,7 @@ export const logoutUser = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Clear token cookie
     res.clearCookie("token");
     res.status(200).send("User logged out");
   } catch (err) {
@@ -147,6 +144,7 @@ export const getUser = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Find user by id
     const user = await UserRepository.findOne({ where: { id: req.userId } });
 
     res.status(200).send({ username: user!.username, email: user!.email });
@@ -161,6 +159,7 @@ export const deleteUser = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Delete user
     await UserRepository.delete({ id: req.userId });
     res.clearCookie("token").status(200).send("Deleted user");
   } catch (err) {

@@ -13,6 +13,7 @@ import UserContext from "./UserContext";
 
 function AuthForm(props) {
   const { setUser } = useContext(UserContext);
+  // Determine form type
   const { isLogin, isRegister, isAccount, authNav } = props;
 
   const [username, setName] = useState("");
@@ -21,6 +22,7 @@ function AuthForm(props) {
 
   const navigate = useNavigate();
 
+  // Set form values
   const handleChange = (event) => {
     event.preventDefault();
 
@@ -34,6 +36,7 @@ function AuthForm(props) {
     }
   };
 
+  // Authenticate user
   const handleAuth = async () => {
     try {
       if (isLogin) await loginUser({ email, password });
@@ -47,6 +50,7 @@ function AuthForm(props) {
     }
   };
 
+  // Delete user profile
   const handleDelete = async () => {
     try {
       await deleteUser();
@@ -57,6 +61,7 @@ function AuthForm(props) {
     }
   };
 
+  // Get user profile
   const getAccounts = async () => {
     if (isAccount) {
       const data = await getUser();

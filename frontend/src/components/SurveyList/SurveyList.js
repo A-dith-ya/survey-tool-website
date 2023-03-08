@@ -49,43 +49,39 @@ const SurveyList = () => {
 
   if (list)
     return (
-      <div>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr className={styles.tr}>
-              <th className={styles.th}>Title</th>
-              <th className={styles.th}>Date Created</th>
-              <th className={styles.th}>Actions</th>
+      <table className={styles.table}>
+        <thead className={styles.thead}>
+          <tr className={styles.tr}>
+            <th className={styles.th}>Title</th>
+            <th className={styles.th}>Date Created</th>
+            <th className={styles.th}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {list.map((survey) => (
+            <tr className={styles.tr} key={survey.id}>
+              <td className={styles.td}>{survey.title}</td>
+              <td className={styles.td}>{survey.createdDate.substr(0, 10)}</td>
+              <td className={styles.td}>
+                <FaEdit
+                  className={styles.edit}
+                  onClick={() => onEdit(survey.id, survey.status)}
+                  data-cy="editSurvey"
+                />
+                <FaChartBar
+                  className={styles.analytics}
+                  onClick={() => onResponse(survey.id)}
+                  data-cy="analyzeSurvey"
+                />
+                <FaTrashAlt
+                  className={styles.delete}
+                  onClick={() => onDelete(survey.id)}
+                />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {list.map((survey) => (
-              <tr className={styles.tr} key={survey.id}>
-                <td className={styles.td}>{survey.title}</td>
-                <td className={styles.td}>
-                  {survey.createdDate.substr(0, 10)}
-                </td>
-                <td className={styles.td}>
-                  <FaEdit
-                    className={styles.edit}
-                    onClick={() => onEdit(survey.id, survey.status)}
-                    data-cy="editSurvey"
-                  />
-                  <FaChartBar
-                    className={styles.analytics}
-                    onClick={() => onResponse(survey.id)}
-                    data-cy="analyzeSurvey"
-                  />
-                  <FaTrashAlt
-                    className={styles.delete}
-                    onClick={() => onDelete(survey.id)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     );
 };
 

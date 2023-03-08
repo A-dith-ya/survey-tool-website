@@ -4,6 +4,7 @@ import { requireAuth } from "../middleware/Auth";
 
 const router: Router = express.Router();
 
+// Survey management routes
 router.post("/", requireAuth, surveys.createSurvey);
 
 router.get("/", requireAuth, surveys.listSurveys);

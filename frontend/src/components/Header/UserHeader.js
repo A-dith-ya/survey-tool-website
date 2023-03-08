@@ -14,6 +14,8 @@ const UserHeader = () => {
   const accountNav = () => {
     navigation("/account");
   };
+
+  // Exit user session
   const logout = async () => {
     try {
       await logoutUser();
@@ -23,6 +25,7 @@ const UserHeader = () => {
       alert(error.message);
     }
   };
+
   return (
     <header className={styles.container}>
       <nav className={styles.nav}>

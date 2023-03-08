@@ -21,4 +21,10 @@ export class User {
 
   @OneToMany(() => Survey, (survey) => survey.user)
   surveys: Survey[];
+
+  constructor(username: string, email: string, password: string) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 }

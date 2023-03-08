@@ -1,15 +1,14 @@
 .container {
   display: flex;
-  gap: 20rem;
+  justify-content: center;
 }
 
 .surveyContainer {
   width: 50%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #e9e9e9;
+  background-color: #f0f0f0;
 }
 
 .title {
@@ -21,6 +20,7 @@
   margin-bottom: 1rem;
   font-size: 2rem;
   font-weight: 500;
+  text-align: center;
 }
 
 .desc {
@@ -33,5 +33,39 @@
   font-weight: 500;
   font-size: 0.9rem;
   border-bottom: 1px solid #ccc;
-  color: #ccc;
+  color: #a7a7a7;
+}
+
+.previewContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.backspace {
+  position: absolute;
+  left: 100px;
+  top: 30px;
+  font-size: 3rem;
+  color: #48e9e9;
+}
+
+.h1 {
+  font-size: 2.5rem;
+}
+
+.h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.submit {
+  margin: 2rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #60d164;
+  color: #fff;
+  font-size: 1.25rem;
 }

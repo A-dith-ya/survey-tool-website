@@ -17,9 +17,9 @@ const Sidebar = ({
   surveyId,
   setSurveyId,
   setStatus,
+  setPreview,
+  preview,
 }) => {
-  const navigation = useNavigate();
-
   // Save present survey data
   const saveSurvey = async () => {
     try {
@@ -46,7 +46,7 @@ const Sidebar = ({
   };
 
   const previewSurvey = () => {
-    navigation("/preview", { state: { surveyId, questions } });
+    setPreview(!preview);
   };
 
   return (

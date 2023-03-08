@@ -7,6 +7,7 @@ import { SurveyRequestBody } from "../interfaces/question";
 import { SurveyRepository } from "../repositories/survey.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { QuestionRepository } from "../repositories/question.repository";
+import { AnonymousRepository } from "../repositories/anonymous.repository";
 
 export const createSurvey = async (
   req: UserAuthInfoRequest,
@@ -16,8 +17,6 @@ export const createSurvey = async (
     const { surveyId, title, description, questions }: SurveyRequestBody =
       req.body;
 
-    console.log(questions);
-
     const user = await UserRepository.findOne({
       where: { id: req.userId },
     });
@@ -26,18 +25,22 @@ export const createSurvey = async (
       where: { id: surveyId },
     });
 
+    // Remove any present questions from the survey
     await QuestionRepository.delete({ survey: userSurvey! });
 
+    // Create a new survey
     if (!surveyId) {
       userSurvey = new Survey(user!, title, description);
     }
 
+    // Set title, description, questions
     userSurvey!.title = title;
     userSurvey!.description = description;
-
     userSurvey!.questions = [];
     let order: number = 1;
+
     for (const question of questions) {
+      // Create a new question
       const quest = new Question(
         userSurvey!,
         order++,
@@ -45,10 +48,16 @@ export const createSurvey = async (
         question.question
       );
 
+      // Initialize question options
       quest.options = [];
 
-      if (question.options)
+      if (question.type === "TEXT" || question.type === "BOOLEAN") {
+        // Default option for questions without user defined options
+        const opt = new Option(quest, "");
+        quest.options.push(opt);
+      } else if (question.options)
         for (const option of question.options) {
+          // Create a new option
           const opt = new Option(quest, option);
           quest.options.push(opt);
         }
@@ -59,11 +68,14 @@ export const createSurvey = async (
         }
       }
 
+      // Add question to survey
       userSurvey!.questions.push(quest);
     }
 
+    // Save survey
     const savedSurvey = await SurveyRepository.save(userSurvey!);
 
+    // Return survey id
     res.status(200).send({ id: savedSurvey.id });
   } catch (e) {
     console.error(e);
@@ -76,12 +88,12 @@ export const listSurveys = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Get all user created surveys
     const surveys = await SurveyRepository.find({
       where: { user: { id: req.userId } },
       select: ["id", "title", "description", "createdDate", "status"],
     });
 
-    console.log(surveys);
     res.status(200).send(surveys);
   } catch (e) {
     console.error(e);
@@ -110,7 +122,8 @@ export const updateStatus = async (
 ): Promise<void> => {
   try {
     const { surveyId, status } = req.body;
-    console.log(surveyId);
+
+    // Update the status of the survey
     await SurveyRepository.update({ id: surveyId }, { status });
 
     res.status(200).send("Changed survey status");
@@ -127,6 +140,7 @@ export const getSurvey = async (
   try {
     const surveyId = parseInt(req.params.surveyId);
 
+    // Get survey, questions and options
     const surveys = await SurveyRepository.findOne({
       relations: {
         questions: { options: true },
@@ -136,6 +150,7 @@ export const getSurvey = async (
         id: true,
         title: true,
         description: true,
+        status: true,
         questions: {
           id: true,
           order: true,
@@ -149,6 +164,7 @@ export const getSurvey = async (
       },
     });
 
+    // Convert questions and options
     const convertedSurvey = surveys?.questions.map((question) => {
       const convertedQuestion = {
         question: question.question,
@@ -163,6 +179,7 @@ export const getSurvey = async (
     res.status(200).send({
       title: surveys?.title,
       description: surveys?.description,
+      status: surveys?.status,
       questions: convertedSurvey,
     });
   } catch (e) {
@@ -178,16 +195,29 @@ export const getSurveyResponse = async (
   try {
     const surveyId = parseInt(req.params.surveyId);
 
+    // Check if anon alreday completed survey
+    const submittedResponse = await AnonymousRepository.findOne({
+      where: { ip: req.ip },
+    });
+    if (submittedResponse) {
+      res.status(400).json({
+        message: "You have already submitted a response",
+      });
+      return;
+    }
+
     const surveys = await SurveyRepository.findOne({
       relations: {
         questions: { options: true },
       },
       where: { id: surveyId },
       select: {
+        id: true,
         title: true,
         description: true,
         status: true,
         questions: {
+          id: true,
           order: true,
           type: true,
           question: true,
@@ -199,27 +229,13 @@ export const getSurveyResponse = async (
       },
     });
 
+    // When survey is not published
     if (surveys!.status === "DRAFT") {
       res.status(400).send("Survey is not ready");
       return;
     }
 
-    const convertedSurvey = surveys?.questions.map((question) => {
-      const convertedQuestion = {
-        question: question.question,
-        order: question.order,
-        type: question.type,
-        options: question.options.map((option) => option.value),
-      };
-
-      return convertedQuestion;
-    });
-
-    res.status(200).send({
-      title: surveys?.title,
-      description: surveys?.description,
-      questions: convertedSurvey,
-    });
+    res.status(200).send(surveys);
   } catch (e) {
     console.error(e);
     res.status(500).send("Internal Server Error");

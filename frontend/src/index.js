@@ -7,8 +7,7 @@ import RegisterPage from "./pages/Auth/Register";
 import AccountPage from "./pages/Auth/Account";
 import DashboardPage from "./pages/Dashboard/Dashboard";
 import SurveyPage from "./pages/Survey/Survey";
-import PublishPage from "./pages/Preview/Publish";
-import PreviewPage from "./pages/Preview/Preview";
+import PublishPage from "./pages/Survey/Publish";
 import ResponsePage from "./pages/Response/Response";
 import UserContext from "./components/AuthForm/UserContext";
 import store from "./app/store";
@@ -34,10 +33,6 @@ const router = createBrowserRouter([
   {
     path: "/survey",
     element: <SurveyPage />,
-  },
-  {
-    path: "/preview",
-    element: <PreviewPage />,
   },
   {
     path: "/open/:surveyId",

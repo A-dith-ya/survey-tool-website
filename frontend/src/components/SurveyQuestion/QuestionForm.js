@@ -42,16 +42,13 @@ const QuestionForm = ({
 
   return (
     <div className={styles.container} data-cy="questionContainer">
-      <div className={styles.questionContainer}>
-        <div className={styles.questionNumber}>{number}.</div>
-        <input
-          type="text"
-          value={question}
-          onChange={onQuestionChange}
-          placeholder="Enter your question here..."
-          className={styles.questionInput}
-        />
-      </div>
+      <input
+        type="text"
+        value={question}
+        onChange={onQuestionChange}
+        placeholder="Enter your question here..."
+        className={styles.questionInput}
+      />
       {(type === QuestionType.MULTIPLE ||
         type === QuestionType.CHECKBOX ||
         type === QuestionType.DROPDOWN) && (

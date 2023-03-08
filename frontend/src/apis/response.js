@@ -2,6 +2,7 @@ import { API_URL } from "../config";
 
 const RESPONSE_API_URL = `${API_URL}/responses`;
 
+// Submit a new response for the survey
 export const submitSurvey = async (responses) => {
   const response = await fetch(RESPONSE_API_URL, {
     method: "POST",
@@ -16,6 +17,7 @@ export const submitSurvey = async (responses) => {
   }
 };
 
+// Get all response results for a survey
 export const getSurveyResponses = async (surveyId) => {
   const res = await fetch(`${RESPONSE_API_URL}/${surveyId}`, {
     method: "GET",

@@ -4,6 +4,7 @@ import { requireAuth } from "../middleware/Auth";
 
 const router: Router = express.Router();
 
+// User management routes
 router.post("/", users.createUser);
 router.post("/login", users.loginUser);
 

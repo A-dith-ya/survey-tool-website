@@ -4,7 +4,6 @@ import { UserAuthInfoRequest } from "../interfaces/request";
 import { Response as EntityResponse } from "../entities/Response";
 import { ResponseRepository } from "../repositories/response.repository";
 import { AnonymousRepository } from "../repositories/anonymous.repository";
-import { SurveyResponseBody } from "../interfaces/response";
 import { OptionRepository } from "../repositories/option.repository";
 import { SurveyRepository } from "../repositories/survey.repository";
 
@@ -13,10 +12,10 @@ export const createResponse = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { ip, responses }: SurveyResponseBody = req.body;
+    const { responses } = req.body;
 
     const submittedResponse = await AnonymousRepository.findOne({
-      where: { ip },
+      where: { ip: req.ip },
     });
     if (submittedResponse) {
       res.status(400).json({
@@ -25,8 +24,10 @@ export const createResponse = async (
       return;
     }
 
-    const newIp = new Anonymous(ip);
+    // New anon response
+    const newIp = new Anonymous(req.ip);
 
+    // Create new set of responses
     for (const response of responses) {
       const option = await OptionRepository.findOne({
         where: { id: response.optionId },
@@ -49,9 +50,9 @@ export const getResponses = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { surveyId }: { surveyId: number } = req.body;
+    const surveyId = parseInt(req.params.surveyId);
 
-    const surveyResponses = await SurveyRepository.find({
+    const surveys = await SurveyRepository.findOne({
       relations: {
         questions: {
           options: {
@@ -61,14 +62,18 @@ export const getResponses = async (
       },
       where: { id: surveyId },
       select: {
+        id: true,
         title: true,
         questions: {
+          id: true,
           order: true,
           type: true,
           question: true,
           options: {
+            id: true,
             value: true,
             response: {
+              id: true,
               text: true,
             },
           },
@@ -76,7 +81,53 @@ export const getResponses = async (
       },
     });
 
-    res.status(200).send(surveyResponses);
+    // Convert results to displayable format
+    const convertedSurvey = surveys?.questions.map((question) => {
+      switch (question.type) {
+        case "DROPDOWN":
+        case "CHECKBOX":
+        case "MULTIPLE":
+          return {
+            question: question.question,
+            order: question.order,
+            type: question.type,
+            options: question.options.map((option) => ({
+              value: option.value,
+              number: option.response.length,
+            })),
+          };
+        case "BOOLEAN":
+          return {
+            question: question.question,
+            order: question.order,
+            type: question.type,
+            trueNumber: question.options.map(
+              (option) =>
+                option.response.filter((res) => res.text === "true").length
+            ),
+            falseNumber: question.options.map(
+              (option) =>
+                option.response.filter((res) => res.text === "false").length
+            ),
+          };
+        case "TEXT":
+          return {
+            question: question.question,
+            order: question.order,
+            type: question.type,
+            options: question.options.map((option) =>
+              option.response.map((res) => res.text)
+            ),
+          };
+      }
+    });
+
+    res.status(200).send({
+      title: surveys?.title,
+      description: surveys?.description,
+      status: surveys?.status,
+      questions: convertedSurvey,
+    });
   } catch (e) {
     console.error(e);
     res.status(500).send("Internal Server Error");

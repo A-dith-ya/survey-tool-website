@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import styles from "./Preview.module.css";
+import React, { useEffect, useState } from "react";
+import styles from "./Survey.module.css";
 import { useParams } from "react-router-dom";
 import { getSurveyResponse } from "../../apis/surveys";
 import MultipleChoice from "../../components/Preview/MultipleChoice";
@@ -43,37 +43,37 @@ const PublishPage = () => {
     } catch (error) {
       console.log(error);
       // User alreday complete survey
-      if (error.message === "Failed to fetch survey") setComplete(true);
-
-      setNotFound(true);
+      if (error.message === "Failed to fetch survey") {
+        setComplete(true);
+      } else setNotFound(true);
     }
   };
   useEffect(() => {
     getOptions();
   }, []);
 
-  if (complete) {
-    return (
-      <div className={styles.container}>
-        <h1>Comepleted Survey!!!</h1>
-      </div>
-    );
-  }
-
   if (notFound) {
     return (
-      <div className={styles.container}>
+      <div className={styles.previewContainer}>
         <h1>404 Survey Not Found</h1>
         <p>The survey you requested could not be found.</p>
       </div>
     );
   }
 
+  if (complete) {
+    return (
+      <div className={styles.previewContainer}>
+        <h1>Comepleted Survey!!!</h1>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.container}>
+    <div className={styles.previewContainer}>
       <h1 className={styles.h1}>{title}</h1>
       <h2 className={styles.h2}>{description}</h2>
-      {questions.map((question, index) => {
+      {questions.map((question) => {
         switch (question.type) {
           case "TEXT":
             return (

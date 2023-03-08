@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Response.module.css";
-import { TextResponse } from "../../components/Results/TextResponse";
+import TextResponse from "../../components/Results/TextResponse";
 import UserHeader from "../../components/Header/UserHeader";
 import BarChartResponse from "../../components/Results/BarChartResponse";
 import { getSurveyResponses } from "../../apis/response";

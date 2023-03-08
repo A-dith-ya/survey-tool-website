@@ -2,6 +2,7 @@ import { API_URL } from "../config";
 
 const USER_API_URL = `${API_URL}/users`;
 
+// Create a new user
 const registerUser = async (data) => {
   const res = await fetch(`${USER_API_URL}`, {
     method: "POST",
@@ -15,6 +16,7 @@ const registerUser = async (data) => {
   if (!res.ok) throw new Error("Failed to create user profile");
 };
 
+// Get user profile
 const getUser = async () => {
   const res = await fetch(`${USER_API_URL}`, {
     method: "GET",
